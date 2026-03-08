@@ -68,12 +68,12 @@
  /*Navigation*/
  .nav {
   position: fixed;
-  top: -100%;
+  top:-100%;
   right: 0;
   width: 250px;
   height: 100vh;
-  background: #222;
   display: flex;
+  background: #222;
   flex-direction: column;
   align-items: center;
   justify-content: center;

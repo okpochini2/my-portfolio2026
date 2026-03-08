@@ -48,7 +48,7 @@ import "../styles/Dashboard.css";
   };
 
   return (
-    <div className="dashboard">
+    <div className="dashboard" id="dashboard">
       <h2>OKS-DEV API DASHBOARD</h2>
       <div className="stats">
         <p>Users: {users}</p>

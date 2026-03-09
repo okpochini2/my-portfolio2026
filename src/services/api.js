@@ -1,12 +1,12 @@
 export async function fetchDashboardData() {
   try {
-  const usersRes = await fetch("http://jsonplaceholder.typicode.com/users");
+  const usersRes = await fetch("https://jsonplaceholder.typicode.com/users");
   const users = await usersRes.json();
 
-  const postsRes = await fetch("http://jsonplaceholder.typicode.com/posts");
+  const postsRes = await fetch("https://jsonplaceholder.typicode.com/posts");
   const posts = await postsRes.json();
 
-  const commentsRes = await fetch("http://jsonplaceholder.typicode.com/comments");
+  const commentsRes = await fetch("https://jsonplaceholder.typicode.com/comments");
   const comments = await commentsRes.json();
 
   return {

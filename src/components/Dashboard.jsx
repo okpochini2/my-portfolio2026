@@ -1,64 +1,81 @@
 import { useEffect, useState } from "react";
-import { Bar } from "react-chartjs-2";
+import { fetchDashboardData } from "../services/api";
+import "../styles/Dashboard.css";
 import {
   Chart as ChartJS,
-  BarElement,
   CategoryScale,
   LinearScale,
+  BarElement,
+  Title,
   Tooltip,
   Legend
 } from "chart.js";
 
-import { fetchDashboardData } from "../services/api";
-import "../styles/Dashboard.css";
+import { Bar } from "react-chartjs-2";
+import { UNSAFE_WithHydrateFallbackProps } from "react-router-dom";
 
  ChartJS.register(
-  BarElement,
   CategoryScale,
   LinearScale,
+  BarElement,
+  Title,
   Tooltip,
   Legend
  );
 
- export default function Dashboard() {
-  const [users, setUsers] = useState(0);
-  const [posts, setPosts] = useState(0);
-  const [comments, setComment] = useState(0);
+ const Dashboard = () => {
+  const [data, setData] = useState(null);
 
   useEffect(() => {
-    async function loadData() {
-      const data = await fetchDashboardData();
-      setUsers(data.users);
-      setPosts(data.posts);
-      setComment(data.comments);
-    }
-
-    loadData();
+    fetchDashboardData().then((res) => {
+      setData(res);
+    });
   }, []);
+ 
 
-  const chartData = {
-    labels: ["Users", "Posts", "Comments"],
-    datasets: [
-      {
-        label: "API Overview",
-        data: [users, posts, comments],
-        backgroundColor: ["#4CAF50", "#2196F3", "#FF9800"]
-      }
-    ]
-  };
+ if (!data) return <p>Loading dashboard...</p>;
 
-  return (
-    <div className="dashboard" id="dashboard">
-      <h2>OKS-DEV API DASHBOARD</h2>
-      <div className="stats">
-        <p>Users: {users}</p>
-        <p>Posts: {posts}</p>
-        <p>Comments: {comments}</p>
-      </div>
+ const chartData = {
+  labels: ["Users", "Posts", "Comments"],
+  datasets: [
+    {
+      label: "Platform Data",
+      data: [data.users, data.posts, data.comments],
+      backgroundColor: [
+        "rgba(75, 192, 192, 0.6)",
+        "rgba(54, 162, 235, 0.6)",
+        "rgba(255, 99, 132, 0.6)"
+      ]
+    }
+  ]
+ };
 
-      <div className="chart-container">
-        <Bar data={chartData} />
-      </div>
+ const options = {
+  responsive: true,
+  plugins: {
+    legend: {
+      position: "top"
+    },
+    title: {
+      display: true,
+      text: "Dashboard Overview"
+    }
+  }
+ };
+
+ return (
+  <div className="dashboard">
+    <h1 id="dashboard">Dashboard</h1>
+
+    <Bar data={chartData} options={options} />
+
+    <div style={{marginTop: "30px", textAlign: "left"}}>
+      <p>Users: {data.users}</p>
+      <p>Posts: {data.posts}</p>
+      <p>Comments: {data.comments}</p>
     </div>
-  )
- }
+  </div>
+ )
+ };
+
+ export default Dashboard;

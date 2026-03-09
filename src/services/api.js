@@ -1,4 +1,5 @@
 export async function fetchDashboardData() {
+  try {
   const usersRes = await fetch("http://jsonplaceholder.typicode.com/users");
   const users = await usersRes.json();
 
@@ -13,4 +14,16 @@ export async function fetchDashboardData() {
     posts: posts.length,
     comments: comments.length
   };
+ } catch (error) {
+  console.log("Live API failed, using fallback JSON:", error);
+
+  try {
+    const fallbackRes = await fetch(`${ProcessingInstruction.env.PUBLIC_URL}/data.json`);
+    const fallbackData = await fallbackRes.json();
+    return fallbackData;
+  } catch (fallbackError) {
+    console.error("Fallback JSON failed too:", fallbackError);
+    return {users: 0, posts: 0, comments: 0};
+  }
+ }
 }
